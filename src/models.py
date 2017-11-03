@@ -98,6 +98,14 @@ class WorkspaceModel(object):
                 next_id = _cmd.id + 1
         return next_id
 
+    def add_dir(self, new_dir):
+        for _dir in self.dirs:
+            if _dir.path == new_dir.path:
+                return
+        next_id = self._next_dir_id()
+        new_dir.id = next_id
+        self.dirs.append(new_dir)
+
 
 
 

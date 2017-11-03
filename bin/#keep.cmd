@@ -1,4 +1,4 @@
 @echo off
 setlocal
-set _KEEP_ROOT=%~dp0/..
-python %_KEEP_ROOT%/keep.py keep
+set KEEP_ROOT=%~dp0/..
+python %KEEP_ROOT%/keep.py keep %*

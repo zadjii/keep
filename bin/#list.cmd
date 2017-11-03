@@ -1,2 +1,4 @@
 @echo off
-python %~dp0/keep.py list
+setlocal
+set KEEP_ROOT=%~dp0/..
+python %KEEP_ROOT%/keep.py list

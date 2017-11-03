@@ -5,10 +5,40 @@ from backend import *
 __author__ = 'zadjii'
 
 def keep(argv):
-    cwd = os.getcwd()
-    E_NOT_IMPL(argv)
+    
+    new_dir_path = os.getcwd()
+    if len(argv) == 1:
+        new_dir_path = argv[0] 
+    new_dir_path = normalize_path(new_dir_path)
+
+    root_model = load_backend()
+    new_dir = DirectoryModel(new_dir_path)
+
+    working_id = get_working_workspace()
+    workspace = root_model.get_workspace(working_id)
+    if workspace is not None:
+        workspace.add_dir(new_dir)
+
+    write_backend(root_model)
+
+def list_dirs(argv):
+    
+    root_model = load_backend()
+
+    working_id = get_working_workspace()
+    workspace = root_model.get_workspace(working_id)
+    if workspace is not None:
+        print('{}\t{}'.format(0, workspace.root))
+
+        for _dir in workspace.dirs:
+            print('{}\t{}'.format(_dir.id, _dir.path))
+
+    write_backend(root_model)
 
 def go(argv):
+    E_NOT_IMPL(argv)
+
+def stash(argv):
     E_NOT_IMPL(argv)
 
 def _do_list_workspaces(): 
@@ -96,8 +126,10 @@ def E_NOT_IMPL(argv):
 
 commands = {
     'keep': keep
+    , 'list': list_dirs
     , 'go': go
     , 'work': work
+    , 'stash': stash
     , 'do': do_command
     , 'new': new
     , 'init': init

@@ -33,3 +33,14 @@ def enable_vt_support():
         out_modes = ctypes.c_uint32(out_modes.value | 0x0004)
         ctypes.windll.kernel32.SetConsoleMode(hOut, out_modes)
 ################################################################################
+
+def normalize_path(some_path):
+    new_path = os.path.abspath(some_path)
+    new_path = os.path.realpath(new_path)
+    return new_path
+
+def get_working_workspace():
+    if 'KEEP_WORKSPACE' in os.environ:
+        return int(os.environ['KEEP_WORKSPACE'])
+    else:
+        return GLOBALS_ID
