@@ -62,14 +62,21 @@
 
   `#go` Goes to a directory
 
-## `?something?` and `do`
+## `?something?`(`#stash` ?) and `do`
 
   Also `#in <dir_id> #do <command_id>`
+  Does #in..do pushd, cd, do, popd? Or just cd, do?
 
 ## `archive`
 
   Stores away a dir, command or workspace in the "archive", just another set of data that we can later sort through.
 
 
+## namespaced commands
 
+  Say I have a command in another workspace I want to use, how do?
+
+  `#work 1` - Switch to workspace 1
+  `#do 2:1` - Do command 1 from workspace 2
+  `#do :1` - Do command 1 from the global workspace
 

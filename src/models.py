@@ -7,6 +7,30 @@ class MyEncoder(JSONEncoder):
     def default(self, o):
         return o.__dict__  
 
+
+class CommandModel(object):
+    """docstring for CommandModel"""
+    def __init__(self, command=''):
+        super(CommandModel, self).__init__()
+        self.command = command
+        self.id = INVALID_ID
+        self.name = ''
+        self.notes = []
+
+    def serialize(self):
+        # self_box = Box(self)
+        # return self_box.to_json()
+        return json.dumps(self.__dict__, cls=MyEncoder)
+
+    @staticmethod
+    def deserialize(json_dict):
+        obj = DirectoryModel()
+        obj.command = json_dict['command']
+        obj.id = json_dict['id']
+        obj.name = json_dict['name']
+        obj.notes = json_dict['notes']
+        return obj
+
 class DirectoryModel(object):
     """docstring for DirectoryModel"""
     def __init__(self, path=''):
@@ -32,13 +56,15 @@ class DirectoryModel(object):
 
 class WorkspaceModel(object):
     """docstring for WorkspaceModel"""
-    def __init__(self, root=''):
+    def __init__(self, root='', _id=INVALID_ID, name=''):
         super(WorkspaceModel, self).__init__()
         self.root = root
-        self.id = INVALID_ID
-        self.name = ''
+        self.init = ''
+        self.id = _id
+        self.name = name
         self.notes = []
         self.dirs = []
+        self.commands = []
 
     def serialize(self):
         # self_box = Box(self.__dict__, box_it_up=True)
@@ -50,11 +76,30 @@ class WorkspaceModel(object):
         obj = WorkspaceModel()
 
         obj.root = json_dict['root']
+        obj.init = json_dict['init'] if 'init' in json_dict else ''
         obj.id = json_dict['id']
         obj.name = json_dict['name']
         obj.notes = json_dict['notes']
-        obj.dirs = [DirectoryModel.deserialize(_dir) for _dir in json_dict['dirs']]
+        obj.dirs = [DirectoryModel.deserialize(_dir) for _dir in json_dict['dirs']] if 'dirs' in json_dict else []
+        obj.commands = [CommandModel.deserialize(_cmd) for _cmd in json_dict['commands']] if 'commands' in json_dict else []
         return obj
+
+    def _next_dir_id(self):
+        next_id = FIRST_VALID_ID
+        for _dir in self.dirs:
+            if _dir.id >= next_id:
+                next_id = _dir.id + 1
+        return next_id
+
+    def _next_cmd_id(self):
+        next_id = FIRST_VALID_ID
+        for _cmd in self.commands:
+            if _cmd.id >= next_id:
+                next_id = _cmd.id + 1
+        return next_id
+
+
+
 
 class RootModel(object):
     """docstring for RootModel"""
@@ -70,10 +115,16 @@ class RootModel(object):
         obj = RootModel()
         if 'workspaces' in json_dict.keys():
             obj.workspaces = [WorkspaceModel.deserialize(_dir) for _dir in json_dict['workspaces']]
+        else:
+            obj.workspaces = []
+        if 'globals' in json_dict.keys():
+            obj.globals = WorkspaceModel.deserialize(json_dict['globals'])
+        else:
+            obj.globals = WorkspaceModel('/', GLOBALS_ID, '<globals>')
         return obj
 
     def _next_workspace_id(self):
-        next_id = 0
+        next_id = FIRST_VALID_ID
         for workspace in self.workspaces:
             if workspace.id >= next_id:
                 next_id = workspace.id + 1
@@ -83,3 +134,12 @@ class RootModel(object):
         next_id = self._next_workspace_id()
         new_workspace.id = next_id
         self.workspaces.append(new_workspace)
+
+    def get_workspace(self, workspace_id):
+        if workspace_id == self.globals.id:
+            return self.globals
+        else:
+            for workspace in self.workspaces:
+                if workspace_id == workspace.id:
+                    return workspace
+            return None
