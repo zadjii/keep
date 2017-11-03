@@ -1,6 +1,8 @@
 from common import *
 from json import JSONEncoder
 
+__author__ = 'zadjii'
+
 class MyEncoder(JSONEncoder):
     def default(self, o):
         return o.__dict__  
@@ -66,5 +68,18 @@ class RootModel(object):
     @staticmethod
     def deserialize(json_dict):
         obj = RootModel()
-        obj.workspaces = [WorkspaceModel.deserialize(_dir) for _dir in json_dict['workspaces']]
+        if 'workspaces' in json_dict.keys():
+            obj.workspaces = [WorkspaceModel.deserialize(_dir) for _dir in json_dict['workspaces']]
         return obj
+
+    def _next_workspace_id(self):
+        next_id = 0
+        for workspace in self.workspaces:
+            if workspace.id >= next_id:
+                next_id = workspace.id + 1
+        return next_id
+
+    def add_workspace(self, new_workspace):
+        next_id = self._next_workspace_id()
+        new_workspace.id = next_id
+        self.workspaces.append(new_workspace)

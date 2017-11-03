@@ -3,8 +3,10 @@ from os import path
 from datetime import datetime
 import json
 from box import Box
-
 from collections import namedtuple
+
+__author__ = 'zadjii'
+
 ResultAndData = namedtuple('ResultAndData', 'success, data')
 
 def Error(data=None):

@@ -1,1 +1,1 @@
-{"workspaces": [{"dirs": [], "notes": [], "root": "foo", "id": -1, "name": "bar"}, {"dirs": [], "notes": [], "root": "foo", "id": -1, "name": "bar"}]}
+{"workspaces": [{"dirs": [], "notes": [], "root": ".", "id": 0, "name": "foo"}, {"dirs": [], "notes": [], "root": ".", "id": 1, "name": "foo"}, {"dirs": [], "notes": [], "root": ".", "id": 2, "name": "foo"}]}
