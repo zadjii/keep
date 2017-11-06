@@ -3,6 +3,9 @@ from commands import *
 __author__ = 'zadjii'
 
 def main(argv):
+    
+    enable_vt_support()
+
     if len(argv) < 2:
         usage(argv)
         sys.exit()

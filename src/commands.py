@@ -4,6 +4,7 @@ from backend import *
 
 __author__ = 'zadjii'
 
+###################################### keep ####################################
 def keep(argv):
     
     new_dir_path = os.getcwd()
@@ -20,35 +21,87 @@ def keep(argv):
         workspace.add_dir(new_dir)
 
     write_backend(root_model)
+################################################################################
+
+###################################### list ####################################
+def _do_list_dirs(workspace):
+    print(workspace.to_list_string())
+    for _dir in workspace.dirs:
+        print(_dir.to_list_string())
 
 def list_dirs(argv):
-    
     root_model = load_backend()
+    working_id = get_working_workspace()
+    workspace = root_model.get_workspace(working_id)
+    if workspace is not None:
+        _do_list_dirs(workspace)
+    else:
+        print('This is an unexpected error. If there is no active workspace, '
+              'you should be given the globals.')
+
+    write_backend(root_model)
+################################################################################
+
+####################################### go #####################################
+def _do_go(workspace, dir_id):
+    dir_model = workspace.get_dir(dir_id)
+    if dir_model is not None:
+        print(dir_model.path) 
+    else:
+        print('.')
+        print()
+        print('Directory {} is not in the current workspace({})'.format(dir_id, workspace.id))
+    print(workspace.root)
+
+
+def go(argv):
+
+    root_model = load_backend()
+    working_id = get_working_workspace()
+    workspace = root_model.get_workspace(working_id)
+    
+    if workspace is not None:
+        if len(argv) == 0:
+            _do_list_dirs()
+            sys.exit()
+        elif len(argv) == 1:
+            dir_id = argv[0]
+            _do_go(workspace, dir_id)
+    else:
+        print('This is an unexpected error. If there is no active workspace, '
+              'you should be given the globals.')
+################################################################################
+      
+###################################### stash ###################################
+def stash(argv):
+    if len(argv) < 1:
+        stash_usage()
+        sys.exit()
+
+    new_cmd_str = ' '.join(argv[1:])
+
+    root_model = load_backend()
+    new_cmd = CommandModel(new_cmd_str)
 
     working_id = get_working_workspace()
     workspace = root_model.get_workspace(working_id)
     if workspace is not None:
-        print('{}\t{}'.format(0, workspace.root))
-
-        for _dir in workspace.dirs:
-            print('{}\t{}'.format(_dir.id, _dir.path))
+        workspace.add_cmd(new_cmd)
 
     write_backend(root_model)
+################################################################################
 
-def go(argv):
-    E_NOT_IMPL(argv)
-
-def stash(argv):
-    E_NOT_IMPL(argv)
-
+###################################### work ####################################
 def _do_list_workspaces(): 
     root_model = load_backend()
     
     workspace = root_model.globals
-    print('{} {} {}'.format(workspace.id, workspace.name,  workspace.root))
+    print(workspace.to_list_string())
+    # print('{} {} {}'.format(workspace.id, workspace.name,  workspace.root))
 
     for workspace in root_model.workspaces:
-        print('{} {} {}'.format(workspace.id, workspace.name,  workspace.root))
+        print(workspace.to_list_string())
+        # print('{} {} {}'.format(workspace.id, workspace.name,  workspace.root))
 
 
 def work(argv):
@@ -66,10 +119,14 @@ def work(argv):
             print()
             print()
             print('Did not find matching workspace')
+################################################################################
 
+####################################### do #####################################
 def do_command(argv):
     E_NOT_IMPL(argv)
+################################################################################
 
+####################################### new ####################################
 def _do_new(new_dir, new_name):   
     root_model = load_backend()
 
@@ -95,6 +152,7 @@ def new(argv):
     new_workspace = _do_new(new_dir, new_name)
 
     print('created new workspace [{}] {}'.format(new_workspace.id, new_workspace.name))
+################################################################################
 
 def init(argv):
     if len(argv) < 2:
@@ -108,6 +166,7 @@ def init(argv):
         workspace.init = ' '.join(argv[1:])
         print('Set workspace {}\'s init command to `{}`'.format(workspace.id, workspace.init))
         write_backend(root_model)
+################################################################################
 
 def usage(argv):
     print('usage')

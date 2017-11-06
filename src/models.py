@@ -54,6 +54,12 @@ class DirectoryModel(object):
         obj.notes = json_dict['notes']
         return obj
 
+    def to_list_string(self):
+        curr_path = normalize_path(os.getcwd())
+        # fmt = '{}*\t{}' if abs_path == entry.path else '{}\t{}'
+        fmt = '*{}\t\x1b[1;32m{}\x1b[0m' if curr_path == self.path else '{}\t{}'
+        return fmt.format(self.id, self.path)
+
 class WorkspaceModel(object):
     """docstring for WorkspaceModel"""
     def __init__(self, root='', _id=INVALID_ID, name=''):
@@ -105,6 +111,31 @@ class WorkspaceModel(object):
         next_id = self._next_dir_id()
         new_dir.id = next_id
         self.dirs.append(new_dir)
+
+    def to_list_string(self):
+        working_id = get_working_workspace()
+        curr_path = normalize_path(os.getcwd())
+        fmt = '*{}:\t\x1b[1;34m{}\t{}\x1b[0m' if working_id == self.id else '{}:\t{}\t{}'
+        return fmt.format(self.id, self.name, self.root)
+
+    def get_dir(self, dir_id):
+        if dir_id == GLOBALS_ID:
+            return self.root
+        else:
+            for _dir in self.dirs:
+                if dir_id == _dir.id:
+                    return _dir
+            return None
+
+    def get_cmd(self, cmd_id):
+        if cmd_id == GLOBALS_ID:
+            return self.root
+        else:
+            for _cmd in self.commands:
+                if cmd_id == _cmd.id:
+                    return _cmd
+            return None
+
 
 
 
