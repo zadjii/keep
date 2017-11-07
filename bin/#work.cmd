@@ -12,19 +12,18 @@ if "%1" == "" (
 
 call :get_params %*
 
-@rem if there is a commnand vf then do it.
+@rem if there is a command vf then do it.
 @rem else just vf.
 if %_found_cmd% == 1 (
-    if %_found_dir% == 1 (
-        call %KEEP_ROOT%\bin\vf.cmd %_target_dir_%
-    ) 
+
+    call %KEEP_ROOT%\bin\vf.cmd %_target_dir_%
+    
     %_target_cmd_%
 ) else (
     if %_found_dir% == 1 (
         call %KEEP_ROOT%\bin\vf.cmd %_target_dir_%
     )
-) 
-
+)
 goto :END
 
 @rem see https://ss64.com/nt/syntax-functions.html
@@ -53,7 +52,7 @@ FOR /F "tokens=* USEBACKQ" %%F IN (`python %KEEP_ROOT%/keep.py work %* 2^> NUL`)
     )
 )
 :end_get_params
-endlocal & set _target_dir_=%__target_dir__% & set _target_cmd_=%__target_cmd__% & set _found_dir=%_found_dir% & set _found_cmd=%_found_cmd% 
+endlocal & set _target_dir_=%__target_dir__% & set "_target_cmd_=%__target_cmd__%" & set _found_dir=%_found_dir% & set _found_cmd=%_found_cmd% 
 
 
 :END

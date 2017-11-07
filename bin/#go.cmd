@@ -8,4 +8,4 @@ python %KEEP_ROOT%/keep.py go %*
 FOR /F "tokens=* USEBACKQ" %%F IN (`python %KEEP_ROOT%/keep.py go %* 2^> NUL`) DO (
     set __target_dir__=%%F
 )
-vf %__target_dir__%
+endlocal & vf %__target_dir__%

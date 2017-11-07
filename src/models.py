@@ -20,7 +20,7 @@ class CommandModel(object):
     def serialize(self):
         # self_box = Box(self)
         # return self_box.to_json()
-        return json.dumps(self.__dict__, cls=MyEncoder)
+        return json.dumps(self.__dict__, cls=MyEncoder, indent=4)
 
     @staticmethod
     def deserialize(json_dict):
@@ -43,7 +43,7 @@ class DirectoryModel(object):
     def serialize(self):
         # self_box = Box(self)
         # return self_box.to_json()
-        return json.dumps(self.__dict__, cls=MyEncoder)
+        return json.dumps(self.__dict__, cls=MyEncoder, indent=4)
 
     @staticmethod
     def deserialize(json_dict):
@@ -75,7 +75,7 @@ class WorkspaceModel(object):
     def serialize(self):
         # self_box = Box(self.__dict__, box_it_up=True)
         # return self_box.to_json()
-        return json.dumps(self.__dict__, cls=MyEncoder)
+        return json.dumps(self.__dict__, cls=MyEncoder, indent=4)
 
     @staticmethod
     def deserialize(json_dict):
@@ -120,7 +120,7 @@ class WorkspaceModel(object):
 
     def get_dir(self, dir_id):
         if dir_id == GLOBALS_ID:
-            return self.root
+            return DirectoryModel(self.root)
         else:
             for _dir in self.dirs:
                 if dir_id == _dir.id:
@@ -147,7 +147,7 @@ class RootModel(object):
         self.workspaces = []
 
     def serialize(self):
-        return json.dumps(self.__dict__, cls=MyEncoder)
+        return json.dumps(self.__dict__, cls=MyEncoder, indent=4)
     
     @staticmethod
     def deserialize(json_dict):

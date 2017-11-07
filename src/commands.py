@@ -49,9 +49,9 @@ def _do_go(workspace, dir_id):
         print(dir_model.path) 
     else:
         print('.')
-        print()
+        print("")
         print('Directory {} is not in the current workspace({})'.format(dir_id, workspace.id))
-    print(workspace.root)
+    # print(workspace.root)
 
 
 def go(argv):
@@ -65,7 +65,7 @@ def go(argv):
             _do_list_dirs()
             sys.exit()
         elif len(argv) == 1:
-            dir_id = argv[0]
+            dir_id = int(argv[0])
             _do_go(workspace, dir_id)
     else:
         print('This is an unexpected error. If there is no active workspace, '
@@ -176,7 +176,7 @@ def new_usage(argv):
     print('\tCreates a new workspace in the given dir with the given name.')
 
 def init_usage(argv):
-    print('usage: init <workspace id> <comamnds>')
+    print('usage: init <workspace id> <command>')
     print('\tCreates a new workspace in the given dir with the given name.')
 
 def E_NOT_IMPL(argv):
