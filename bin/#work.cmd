@@ -61,9 +61,7 @@ goto :END
 echo um
 
 :do_init 
-setlocal
 call %_target_cmd_%
-endlocal
 goto :END
 
 
