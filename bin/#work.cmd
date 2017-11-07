@@ -18,13 +18,16 @@ if %_found_cmd% == 1 (
 
     call %KEEP_ROOT%\bin\vf.cmd %_target_dir_%
     
-    %_target_cmd_%
+    @rem For some reason, if we don't call out to another fn, then the title can get polluted.
+    call :do_init
+
 ) else (
     if %_found_dir% == 1 (
         call %KEEP_ROOT%\bin\vf.cmd %_target_dir_%
     )
 )
 goto :END
+
 
 @rem see https://ss64.com/nt/syntax-functions.html
 @rem    This has to be packaged up as a function, so that the setlocal/endlocal 
@@ -53,6 +56,15 @@ FOR /F "tokens=* USEBACKQ" %%F IN (`python %KEEP_ROOT%/keep.py work %* 2^> NUL`)
 )
 :end_get_params
 endlocal & set _target_dir_=%__target_dir__% & set "_target_cmd_=%__target_cmd__%" & set _found_dir=%_found_dir% & set _found_cmd=%_found_cmd% 
+goto :END
+
+echo um
+
+:do_init 
+setlocal
+call %_target_cmd_%
+endlocal
+goto :END
 
 
 :END
