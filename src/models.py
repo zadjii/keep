@@ -24,12 +24,16 @@ class CommandModel(object):
 
     @staticmethod
     def deserialize(json_dict):
-        obj = DirectoryModel()
+        obj = CommandModel()
         obj.command = json_dict['command']
         obj.id = json_dict['id']
         obj.name = json_dict['name']
         obj.notes = json_dict['notes']
         return obj
+
+    def to_list_string(self):
+        fmt = '{}\t{}\t{}'
+        return fmt.format(self.id, self.name, self.command)
 
 class DirectoryModel(object):
     """docstring for DirectoryModel"""
@@ -111,6 +115,14 @@ class WorkspaceModel(object):
         next_id = self._next_dir_id()
         new_dir.id = next_id
         self.dirs.append(new_dir)
+
+    def add_cmd(self, new_cmd):
+        for _cmd in self.commands:
+            if _cmd.command == new_cmd.command:
+                return
+        next_id = self._next_cmd_id()
+        new_cmd.id = next_id
+        self.commands.append(new_cmd)
 
     def to_list_string(self):
         working_id = get_working_workspace()

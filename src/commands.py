@@ -73,20 +73,26 @@ def go(argv):
 ################################################################################
       
 ###################################### stash ###################################
+def _do_list_commands(workspace):
+    print(workspace.to_list_string())
+    for _cmd in workspace.commands:
+        print(_cmd.to_list_string())
+
 def stash(argv):
-    if len(argv) < 1:
-        stash_usage()
-        sys.exit()
-
-    new_cmd_str = ' '.join(argv[1:])
-
     root_model = load_backend()
-    new_cmd = CommandModel(new_cmd_str)
-
     working_id = get_working_workspace()
     workspace = root_model.get_workspace(working_id)
     if workspace is not None:
-        workspace.add_cmd(new_cmd)
+        if len(argv) < 1:
+            _do_list_commands(workspace)
+        else:
+            new_cmd_str = ' '.join(argv[0:])
+            new_cmd = CommandModel(new_cmd_str)
+            workspace.add_cmd(new_cmd)
+            print(new_cmd.to_list_string())
+    else:
+        print('This is an unexpected error. If there is no active workspace, '
+              'you should be given the globals.')
 
     write_backend(root_model)
 ################################################################################
@@ -122,8 +128,29 @@ def work(argv):
 ################################################################################
 
 ####################################### do #####################################
+def _do_do(workspace, cmd_id):
+    cmd_model = workspace.get_cmd(cmd_id)
+    if cmd_model is not None:
+        print(cmd_model.command) 
+    else:
+        print('.')
+        print("")
+        print('Command {} is not in the current workspace({})'.format(cmd_id, workspace.id))
+
+
 def do_command(argv):
-    E_NOT_IMPL(argv)
+    root_model = load_backend()
+    working_id = get_working_workspace()
+    workspace = root_model.get_workspace(working_id)
+    if workspace is not None:
+        if len(argv) < 1:
+            _do_list_commands(workspace)
+        elif len(argv) == 1:
+            cmd_id = int(argv[0])
+            _do_do(workspace, cmd_id)
+    else:
+        print('This is an unexpected error. If there is no active workspace, '
+              'you should be given the globals.')
 ################################################################################
 
 ####################################### new ####################################

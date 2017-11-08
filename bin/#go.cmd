@@ -8,4 +8,5 @@ python %KEEP_ROOT%/keep.py go %*
 FOR /F "tokens=* USEBACKQ" %%F IN (`python %KEEP_ROOT%/keep.py go %* 2^> NUL`) DO (
     set __target_dir__=%%F
 )
-endlocal & vf %__target_dir__%
+endlocal & call vf %__target_dir__%
+@rem have to use call on the above line to get the title to reset I guess.
