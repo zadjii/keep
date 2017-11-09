@@ -156,6 +156,7 @@ class RootModel(object):
     """docstring for RootModel"""
     def __init__(self):
         super(RootModel, self).__init__()
+        self.globals = WorkspaceModel('/', GLOBALS_ID, '<globals>')
         self.workspaces = []
 
     def serialize(self):
@@ -166,12 +167,8 @@ class RootModel(object):
         obj = RootModel()
         if 'workspaces' in json_dict.keys():
             obj.workspaces = [WorkspaceModel.deserialize(_dir) for _dir in json_dict['workspaces']]
-        else:
-            obj.workspaces = []
         if 'globals' in json_dict.keys():
             obj.globals = WorkspaceModel.deserialize(json_dict['globals'])
-        else:
-            obj.globals = WorkspaceModel('/', GLOBALS_ID, '<globals>')
         return obj
 
     def _next_workspace_id(self):
@@ -193,4 +190,5 @@ class RootModel(object):
             for workspace in self.workspaces:
                 if workspace_id == workspace.id:
                     return workspace
+            print('[{}] is not a valid workspace id.'.format(workspace_id))
             return None
