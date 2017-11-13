@@ -1,6 +1,4 @@
 @echo off
-setlocal
-setlocal enabledelayedexpansion
 set KEEP_ROOT=%~dp0/..
 
 @rem The contents of this file should be the same in both #go and +

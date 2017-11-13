@@ -31,5 +31,9 @@ if "%_BuildAlt%" == "" (
 
 PROMPT $e[107;30m%_razPROMPT%[$T]$e[97;46m%_seperator%$P$e[36;49m%_seperator%$e[0m$_$e[0m%_GITPROMPT%$e[94m%username%$e[0m@$e[32m%computername%$e[0m$G
 
+@rem Hey you. Working on a MinwinPC machine? %username% is actually "MINWINPC$" there.
+@rem use this instead:
+@rem PROMPT $e[107;30m[$T]$e[97;46m$G$P$e[36;49m$G$e[0m$_$e[94m%username%e[0m@$e[32m%computername%$e[0m$G
+
 
 @chcp 437 1> NUL
