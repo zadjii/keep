@@ -62,7 +62,7 @@ def go(argv):
     
     if workspace is not None:
         if len(argv) == 0:
-            _do_list_dirs()
+            _do_list_dirs(workspace)
             sys.exit()
         elif len(argv) == 1:
             dir_id = int(argv[0])
