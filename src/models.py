@@ -32,8 +32,13 @@ class CommandModel(object):
         return obj
 
     def to_list_string(self):
-        fmt = '{}\t{}\t{}'
-        return fmt.format(self.id, self.name, self.command)
+        if (self.name is not None) and not (self.name == ''):
+            fmt = '{}\t{}\t{}'
+            return fmt.format(self.id, self.name, self.command)
+        else:
+            fmt = '{}\t{}'
+            return fmt.format(self.id, self.command)
+
 
 class DirectoryModel(object):
     """docstring for DirectoryModel"""
@@ -127,7 +132,7 @@ class WorkspaceModel(object):
     def to_list_string(self):
         working_id = get_working_workspace()
         curr_path = normalize_path(os.getcwd())
-        fmt = '*{}:\t\x1b[1;34m{}\t{}\x1b[0m' if working_id == self.id else '{}:\t{}\t{}'
+        fmt = '*{}/\t\x1b[1;34m{}\t{}\x1b[0m' if working_id == self.id else '{}/\t{}\t{}'
         return fmt.format(self.id, self.name, self.root)
 
     def get_dir(self, dir_id):

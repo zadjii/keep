@@ -24,17 +24,27 @@ def keep(argv):
 ################################################################################
 
 ###################################### list ####################################
-def _do_list_dirs(workspace):
-    print(workspace.to_list_string())
+def _list_dirs(workspace):
     for _dir in workspace.dirs:
         print(_dir.to_list_string())
 
-def list_dirs(argv):
+def _do_list_dirs(workspace):
+    print(workspace.to_list_string())
+    _list_dirs(workspace)
+
+def _do_list(workspace):
+    print(workspace.to_list_string())
+    print('dirs:')
+    _list_dirs(workspace)
+    print('commands:')
+    _list_commands(workspace)
+
+def list_workspace(argv):
     root_model = load_backend()
     working_id = get_working_workspace()
     workspace = root_model.get_workspace(working_id)
     if workspace is not None:
-        _do_list_dirs(workspace)
+        _do_list(workspace)
     else:
         print('This is an unexpected error. If there is no active workspace, '
               'you should be given the globals.')
@@ -73,10 +83,13 @@ def go(argv):
 ################################################################################
       
 ###################################### stash ###################################
-def _do_list_commands(workspace):
-    print(workspace.to_list_string())
+def _list_commands(workspace):
     for _cmd in workspace.commands:
         print(_cmd.to_list_string())
+
+def _do_list_commands(workspace):
+    print(workspace.to_list_string())
+    _list_commands(workspace)
 
 def stash(argv):
     root_model = load_backend()
@@ -212,7 +225,7 @@ def E_NOT_IMPL(argv):
 
 commands = {
     'keep': keep
-    , 'list': list_dirs
+    , 'list': list_workspace
     , 'go': go
     , 'work': work
     , 'stash': stash
