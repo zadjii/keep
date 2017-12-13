@@ -33,7 +33,7 @@ class CommandModel(object):
 
     def to_list_string(self):
         if (self.name is not None) and not (self.name == ''):
-            fmt = '{}\t{}\t{}'
+            fmt = '{}\t\x1b[1;30m{}\x1b[0m\t{}'
             return fmt.format(self.id, self.name, self.command)
         else:
             fmt = '{}\t{}'

@@ -20,7 +20,8 @@ rem set _GITPROMPT=
 if "%GITBRANCH%" == "" (
     set _GITPROMPT=$e[0m
 ) else (
-    set "_GITPROMPT= $e[48;5;214m[%GITBRANCH%]$e[0m "
+    rem set "_GITPROMPT= $e[48;5;214m[%GITBRANCH%]$e[0m "
+    set "_GITPROMPT= $e[43m[%GITBRANCH%]$e[0m "
 )
 
 if "%_BuildAlt%" == "" (
