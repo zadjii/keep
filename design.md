@@ -5,7 +5,7 @@
 
 ## Workspaces
 
-  These are the toplevel entries, a collection of directories and 
+  These are the toplevel entries, a collection of directories and
   `#work`: list workspaces
   `#work [ID]`: switch to workspace `[ID]`
 
@@ -25,15 +25,15 @@
         , 'notes': [str]
         , 'dirs': [{
             'id': int
-            , 'path': str  
-            , 'name': str  
-            , 'notes': [str]  
+            , 'path': str
+            , 'name': str
+            , 'notes': [str]
         }]
         , 'commands': [{
             'id': int
-            , 'path': str  
-            , 'name': str  
-            , 'notes': [str]  
+            , 'path': str
+            , 'name': str
+            , 'notes': [str]
         }]
     }]
 }
@@ -45,7 +45,7 @@
   {
     'name': str, opt
     , 'notes': [str]
-    , 'root': the 
+    , 'root': the
 
   }
   ```
