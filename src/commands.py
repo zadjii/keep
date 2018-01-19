@@ -4,6 +4,7 @@ from backend import *
 
 __author__ = 'zadjii'
 
+
 ###################################### keep ####################################
 def keep(argv):
 
@@ -34,9 +35,11 @@ def _do_list_dirs(workspace):
 
 def _do_list(workspace):
     print(workspace.to_list_string())
-    print('dirs:')
+
+    print(colorize_string('Directories:', DIRECTORIES_LABEL_COLOR))
     _list_dirs(workspace)
-    print('commands:')
+
+    print(colorize_string('Commands:', COMMANDS_LABEL_COLOR))
     _list_commands(workspace)
 
 def list_workspace(argv):
