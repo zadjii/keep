@@ -2,7 +2,7 @@
 @chcp 65001 1> NUL
 
 
-@rem THis is your seperator character
+@rem This is your seperator character
 @rem    Most fonts don't support the first one, it's a powerline character
 @rem    If it's not supported, try another
 
@@ -21,7 +21,7 @@ if "%GITBRANCH%" == "" (
     set _GITPROMPT=$e[0m
 ) else (
     rem set "_GITPROMPT= $e[48;5;214m[%GITBRANCH%]$e[0m "
-    set "_GITPROMPT= $e[43m[%GITBRANCH%]$e[0m "
+    set "_GITPROMPT= $e[43;37m[%GITBRANCH%]$e[0m "
 )
 
 if "%_BuildAlt%" == "" (
@@ -30,7 +30,13 @@ if "%_BuildAlt%" == "" (
     set "_razPROMPT= [%_BuildAlt%] "
 )
 
-PROMPT $e[107;30m%_razPROMPT%[$T]$e[97;46m%_seperator%$P$e[36;49m%_seperator%$e[0m$_$e[0m%_GITPROMPT%$e[94m%username%$e[0m@$e[32m%computername%$e[0m$G
+if "%KEEP_WORKSPACE%" == "" (
+    set "_KEEP_WORKSPACE_PROMPT="
+) else (
+    set "_KEEP_WORKSPACE_PROMPT=$e[35;40m[%KEEP_WORKSPACE%]$e[m"
+)
+
+PROMPT $e[107;30m%_razPROMPT%[$T]$e[97;46m%_seperator%$P$e[36;49m%_seperator%$e[0m$_$e[0m%_KEEP_WORKSPACE_PROMPT%%_GITPROMPT%$e[94m%username%$e[0m@$e[32m%computername%$e[0m$G
 
 @rem Hey you. Working on a MinwinPC machine? %username% is actually "MINWINPC$" there.
 @rem use this instead:
