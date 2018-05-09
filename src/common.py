@@ -27,10 +27,16 @@ COMMANDS_LABEL_COLOR = '\x1b[1;33;100m'
 DIRECTORY_NUMBER_COLOR = '\x1b[1;36;49m'
 COMMAND_NUMBER_COLOR = '\x1b[1;33;49m'
 
-NAME_LABEL_COLOR = '\x1b[1;30m'
+# For some unknown reason, setting it to brigh clack this way sometimes makes
+#   the entire name just disappear on a black background, instead of writing it
+#   as bright black.
+# Honestly, that's probably a conhost bug, but I have no idea
+# NAME_LABEL_COLOR = '\x1b[1;30m'
+NAME_LABEL_COLOR = '\x1b[30;47m'
 
 # RESET_COLORS = '\x1b[39;49m'
 RESET_COLORS = '\x1b[0m'
+CURRENT_DIR_COLOR = '\x1b[1;32m'
 
 def colorize_string(text, color, reset_color=True):
     return '{}{}{}'.format(color, text, RESET_COLORS if reset_color else '')

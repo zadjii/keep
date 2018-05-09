@@ -6,8 +6,8 @@
 @rem    Most fonts don't support the first one, it's a powerline character
 @rem    If it's not supported, try another
 
-rem set _seperator=
-set _seperator=$g
+set _seperator=
+rem set _seperator=$g
 
 set GITBRANCH=
 
