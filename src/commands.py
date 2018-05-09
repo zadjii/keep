@@ -218,7 +218,6 @@ def _do_name(workspace, entry_type, entry_id, entry_name):
 
 
 def name(argv):
-    print(argv)
     root_model = load_backend()
     working_id = get_working_workspace()
     workspace = root_model.get_workspace(working_id)
