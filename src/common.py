@@ -44,3 +44,23 @@ def get_working_workspace():
         return int(os.environ['KEEP_WORKSPACE'])
     else:
         return GLOBALS_ID
+
+
+def parse_id(id_token):
+    rd = Error()
+
+    if '/' in id_token:
+        parts = id_token.split('/')
+        if len(parts) > 2:
+            rd = Error('Invalid arg {}'.format(id_token))
+        else:
+            try:
+                workspace_id = int(parts[0]) if len(parts[0]) > 0 else get_working_workspace()
+                element_id = int(parts[1]) if len(parts[1]) > 0 else None
+                rd = Success(workspace_id, element_id)
+            except Exception as e:
+                rd = Error('Error parsing arg {}'.format(id_token))
+                print parts
+    else:
+        rd = Success((get_working_workspace(), int(id_token)))
+    return rd
