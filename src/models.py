@@ -5,7 +5,7 @@ __author__ = 'zadjii'
 
 class MyEncoder(JSONEncoder):
     def default(self, o):
-        return o.__dict__  
+        return o.__dict__
 
 
 class CommandModel(object):
@@ -16,6 +16,9 @@ class CommandModel(object):
         self.id = INVALID_ID
         self.name = ''
         self.notes = []
+
+    def set_name(self, name):
+        self.name = name
 
     def serialize(self):
         # self_box = Box(self)
@@ -33,11 +36,13 @@ class CommandModel(object):
 
     def to_list_string(self):
         if (self.name is not None) and not (self.name == ''):
-            fmt = '{}\t\x1b[1;30m{}\x1b[0m\t{}'
-            return fmt.format(self.id, self.name, self.command)
+            fmt = '{}\t{}\x1b[0m\t{}'
+            return fmt.format(colorize_string(self.id, COMMAND_NUMBER_COLOR),
+                              colorize_string(self.name, NAME_LABEL_COLOR),
+                              self.command)
         else:
             fmt = '{}\t{}'
-            return fmt.format(self.id, self.command)
+            return fmt.format(colorize_string(self.id, COMMAND_NUMBER_COLOR), self.command)
 
 
 class DirectoryModel(object):
@@ -48,6 +53,9 @@ class DirectoryModel(object):
         self.id = INVALID_ID
         self.name = ''
         self.notes = []
+
+    def set_name(self, name):
+        self.name = name
 
     def serialize(self):
         # self_box = Box(self)
@@ -65,9 +73,12 @@ class DirectoryModel(object):
 
     def to_list_string(self):
         curr_path = normalize_path(os.getcwd())
-        # fmt = '{}*\t{}' if abs_path == entry.path else '{}\t{}'
-        fmt = '*{}\t\x1b[1;32m{}\x1b[0m' if curr_path == self.path else '{}\t{}'
-        return fmt.format(self.id, self.path)
+        prefix = '*' if curr_path == self.path else ''
+        id_str = colorize_string(self.id, DIRECTORY_NUMBER_COLOR)
+        name = '{}\x1b[0m\t'.format(colorize_string(self.name, NAME_LABEL_COLOR)) if (self.name is not None) and not (self.name == '') else ''
+        path = colorize_string(self.path, CURRENT_DIR_COLOR if curr_path == self.path else RESET_COLORS)
+        return '{}{}\t{}{}'.format(prefix, id_str, name, path)
+
 
 class WorkspaceModel(object):
     """docstring for WorkspaceModel"""
@@ -154,9 +165,6 @@ class WorkspaceModel(object):
             return None
 
 
-
-
-
 class RootModel(object):
     """docstring for RootModel"""
     def __init__(self):
@@ -166,7 +174,7 @@ class RootModel(object):
 
     def serialize(self):
         return json.dumps(self.__dict__, cls=MyEncoder, indent=4)
-    
+
     @staticmethod
     def deserialize(json_dict):
         obj = RootModel()

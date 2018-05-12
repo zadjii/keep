@@ -4,6 +4,7 @@ from backend import *
 
 __author__ = 'zadjii'
 
+
 ###################################### keep ####################################
 def keep(argv):
 
@@ -34,9 +35,11 @@ def _do_list_dirs(workspace):
 
 def _do_list(workspace):
     print(workspace.to_list_string())
-    print('dirs:')
+
+    print(colorize_string('Directories:', DIRECTORIES_LABEL_COLOR))
     _list_dirs(workspace)
-    print('commands:')
+
+    print(colorize_string('Commands:', COMMANDS_LABEL_COLOR))
     _list_commands(workspace)
 
 def list_workspace(argv):
@@ -194,6 +197,54 @@ def new(argv):
     print('created new workspace [{}] {}'.format(new_workspace.id, new_workspace.name))
 ################################################################################
 
+####################################### name ###################################
+def _do_name(workspace, entry_type, entry_id, entry_name):
+    model = workspace.get_cmd(entry_id) if entry_type == 'cmd' else workspace.get_dir(entry_id)
+    if model is not None:
+        if entry_name is None:
+            if model.name is not None:
+                print(model.name)
+                return False
+            else:
+                print('{} {} has no name'.format(entry_type, entry_id))
+                return False
+        else:
+            model.set_name(entry_name)
+            print(model.to_list_string())
+            return True
+    else:
+        print('{} {} is not in the current workspace({})'.format(entry_type, entry_id, workspace.id))
+        return False
+
+
+def name(argv):
+    root_model = load_backend()
+    working_id = get_working_workspace()
+    workspace = root_model.get_workspace(working_id)
+    if workspace is not None:
+        if len(argv) < 2:
+            name_usage(argv)
+        # TODO: be able to name things with just .N or /N (for cmds/dirs)
+        # elif len(argv) == 1:
+        #     cmd_id = int(argv[0])
+        #     _do_do(workspace, cmd_id)
+        else:
+            entry_type = argv[0]
+            entry_id = int(argv[1])
+            entry_name = argv[2] if len(argv) > 2 else None
+            if not ((entry_type == 'cmd') or (entry_type == 'dir')):
+                name_usage(argv)
+                print('Expected either \'cmd\' or \'dir\', got \'{}\''.format(entry_type))
+            else:
+                save = _do_name(workspace, entry_type, entry_id, entry_name)
+                if save:
+                    write_backend(root_model)
+    else:
+        print('This is an unexpected error. If there is no active workspace, '
+              'you should be given the globals.')
+################################################################################
+
+################################################################################
 def init(argv):
     if len(argv) < 2:
         init_usage(argv)
@@ -228,6 +279,10 @@ def init_usage(argv):
     print('usage: init <workspace id> <command>')
     print('\tCreates a new workspace in the given dir with the given name.')
 
+def name_usage(argv):
+    print('usage: name <cmd|dir> <id> [name]')
+    print('\tNames either a dir or command. If [name] is omitted, instead prints the name of the dir/command')
+
 def E_NOT_IMPL(argv):
     print('Command not implemented yet.')
     print('argv={}'.format(argv))
@@ -242,4 +297,7 @@ commands = {
     , 'new': new
     , 'init': init
     , 'backend': backend_command
+    , 'name': name
 }
+# name [cmd|dir] [id] <name>
+# sets the name for the cmd or dir with the given id to name, or prints it's name
