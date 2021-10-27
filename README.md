@@ -1,4 +1,4 @@
-# keep
+# Keep
 
   A collection of helper utilities for working in the shell. Useful for quickly
     storing commands and directories from the commandline, so you can come back
@@ -33,7 +33,7 @@ Workspaces have a root directory that they automatically switch you to, and
   running setup commands that you might want to everytime you load that
   workspace.
 For example, setting environment variables, running `git status`, setting a
-  color scheme with [colortool](www.github.com/microsoft/console), etc.
+  color scheme with [colortool](https://www.github.com/microsoft/console), etc.
 
 ### `#stash` and `#do`
 
